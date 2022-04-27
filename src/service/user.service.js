@@ -3,11 +3,14 @@ const connection = require("../app/database")
 
 class UserService {
   async register (user, password) {
-    try {
-      const sql = "insert account(user, password) into values (?,?) "
-      const res = await connection.execute(sql, [user, password])
-      return res
-    } catch (error) {
-    }
+    const sql = "insert into account(user, `password`) values (?,?);"
+    return await connection.execute(sql, [user, password])
+  }
+  async isExist(user) {
+    const sql = "select * from account where user = ?;"
+    return await connection.execute(sql, [user])
   }
 }
+
+
+module.exports = new UserService()
