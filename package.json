@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./src/main.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,8 @@
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.1.1",
     "mysql2": "^2.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
