@@ -12,6 +12,9 @@ router.post("/register",
   userController.register
 )
 
+// 用户登录
+router.post("/login", verify.isUserNull, userController.login)
+ 
 
 
 module.exports = router

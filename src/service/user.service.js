@@ -10,6 +10,10 @@ class UserService {
     const sql = "select * from account where user = ?;"
     return await connection.execute(sql, [user])
   }
+  async login(user, password) {
+    const sql = "select * from account where user = ? and password = ?"
+    return connection.execute(sql, [user, password])
+  }
 }
 
 

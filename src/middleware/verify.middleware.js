@@ -34,12 +34,23 @@ async function duplicateUser(ctx, next) {
   } catch (error) {
     return ctx.app.emit("error", error, ctx)
   }
+}
 
-
+async function isUserNull(ctx, next) {
+  const { user, password} = ctx.request.body
+  if (user && password) {
+    await next()
+  } else {
+    ctx.body = {
+      code: 500,
+      message: "缺失账户名或密码"
+    }
+  }
 }
 
 
 module.exports = {
   verifyUserPwd,
-  duplicateUser
+  duplicateUser,
+  isUserNull
 }
