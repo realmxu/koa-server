@@ -38,6 +38,22 @@ class UserController {
       return ctx.app.emit("error", error, ctx)
     }
   }
+
+  async getUserList(ctx, next) {
+    try {
+      const { pageSize, currentPage } = ctx.request.query
+      const res = await userSerivce.getUserList(parseInt(currentPage), parseInt(pageSize))
+      const resTotal = await userSerivce.getTotalUserList()
+      ctx.body = {
+        code: 200,
+        results: res[0],
+        total: resTotal[0][0].total
+      }
+    } catch (error) {
+      return ctx.app.emit("error", error, ctx)
+    }
+
+  }
 }
 
 module.exports = new UserController()

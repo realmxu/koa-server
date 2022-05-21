@@ -11,8 +11,16 @@ class UserService {
     return await connection.execute(sql, [user])
   }
   async login(user, password) {
-    const sql = "select * from account where user = ? and password = ?"
-    return connection.execute(sql, [user, password])
+    const sql = "select * from account where user = ? and password = ?;"
+    return await connection.execute(sql, [user, password])
+  }
+  async getUserList(currentPage, pageSize) {
+    const sql  = "select * from account limit ? offset ?;"
+    return await connection.execute(sql, [String(pageSize), String((currentPage - 1) * pageSize)])
+  }
+  async getTotalUserList() {
+    const sql = "select count(*) as total from account;"
+    return await connection.execute(sql)
   }
 }
 
