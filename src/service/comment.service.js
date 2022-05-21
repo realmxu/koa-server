@@ -17,8 +17,23 @@ class Comment {
   }
 
   async getCommentList(currentPage, pageSize) {
-    const sql = "select * from comment limit ? offset ?"
+    const sql = "select * from comment limit ? offset ?;"
     return connection.execute(sql, [String(pageSize), String((currentPage - 1 ) * pageSize)])
+  }
+
+  async getUserIdByCommentId(commentId) {
+    const sql = "select * from comment where id = ?;"
+    return await connection.execute(sql, [commentId])
+  }
+
+  async modifyComment(id, title, content) {
+    const sql = "update comment set title = ?,content = ? where id = ?;"
+    return await connection.execute(sql, [title, content, id])
+  }
+
+  async deleteComment(id) {
+    const sql = "delete from comment where id = ?;"
+    return connection.execute(sql, [id])
   }
 }
 
