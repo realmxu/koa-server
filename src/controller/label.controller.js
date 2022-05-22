@@ -13,6 +13,36 @@ class LabelController {
       ctx.app.emit("error", error, ctx)
     }
   }
+
+
+  async addCommentLabels(ctx, next) {
+    try {
+      const labelIdArray = []
+      const { request, response } = ctx
+      const { commentId, labels } = request.body
+      for (const label of labels) {
+        const [ result ] = await labelService.getLabelIdByName(label)
+        if (result.length > 0) {
+          labelIdArray.push(result[0].id)
+        } else {
+          const [ result ] = await labelService.create(label)
+          labelIdArray.push(result.insertId)
+        }
+      }
+      for (const labelId of labelIdArray) {
+        const flag = await labelService.isExistRelative(commentId, labelId)
+        if (!flag) {
+          const res = await labelService.createCommentLabel(commentId, labelId)
+        }
+      }
+      response.body = {
+        code: 200,
+        message: "添加成功！"
+      }
+    } catch (error) {
+      ctx.app.emit("error", error, ctx)
+    }
+  }
 }
 
 
