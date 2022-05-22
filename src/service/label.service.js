@@ -21,6 +21,16 @@ class LabelService {
     const [result] = await connection.execute(sql, [comment_id, label_id])
     return result.length > 0 ? true : false
   }
+
+  async getLabelList(currentPage, pageSize) {
+    const sql  = "select * from label limit ? offset ?;"
+    return await connection.execute(sql, [String(pageSize), String((currentPage - 1) * pageSize)])
+  }
+
+  async getLabelListTotal() {
+    const sql = "select * from label;"
+    return await connection.execute(sql)
+  }
 }
 
 module.exports = new LabelService()

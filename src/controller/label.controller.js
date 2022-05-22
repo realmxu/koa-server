@@ -43,6 +43,22 @@ class LabelController {
       ctx.app.emit("error", error, ctx)
     }
   }
+
+
+  async getLabelList(ctx, next) {
+    try {
+      const { pageSize, currentPage } = ctx.request.query
+      const [ result ] = await labelService.getLabelList(currentPage, pageSize)
+      const [res] = await labelService.getLabelListTotal()
+      ctx.response.body = {
+        code: 200,
+        data: result,
+        total: res.length
+      }
+    } catch (error) {
+      ctx.app.emit("error", error, ctx)
+    }
+  }
 }
 
 
