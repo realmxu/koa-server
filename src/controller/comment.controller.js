@@ -1,6 +1,7 @@
 const commentService = require("../service/comment.service")
 
 class CommentController {
+  
   async sendComment(ctx, next) {
     const { id, user, role } = ctx.state
     const { title, content } = ctx.request.body

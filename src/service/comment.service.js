@@ -11,13 +11,38 @@ class Comment {
       m.id,
       m.title,
       m.content,
-    JSON_OBJECT("id", u.id, "role", u.role, "user",u.user) user
-    from comment m left join account u on m.user_id = u.id where m.id = ?`
+      JSON_OBJECT("id", u.id, "role", u.role, "user",u.user) user,
+      IF(COUNT(j.id), JSON_ARRAYAGG(JSON_OBJECT("id", j.id, "judgeContent", j.judge_content, "selfId", j.self_id, "user", 
+      JSON_OBJECT("id", u.id, "name", u.user, "role", u.role)
+      )), NULL) judge,
+      (select 
+        count(*) 
+      from judge j where j.comment_id = m.id ) total
+      from comment m
+      left join account u on m.user_id = u.id 
+      left join judge j on m.id = j.comment_id
+      where m.id = ?
+      group by m.id`
     return await connection.execute(sql, [id])
   }
 
   async getCommentList(currentPage, pageSize) {
-    const sql = "select * from comment limit ? offset ?;"
+    const sql = `select 
+      m.id,
+      m.title,
+      m.content,
+      JSON_OBJECT("id", u.id, "role", u.role, "user",u.user) user,
+      IF(COUNT(j.id), JSON_ARRAYAGG(JSON_OBJECT("id", j.id, "judgeContent", j.judge_content, "selfId", j.self_id, "user", 
+      JSON_OBJECT("id", u.id, "name", u.user, "role", u.role)
+      )), NULL) judge,
+      (select 
+        count(*) 
+      from judge j where j.comment_id = m.id ) total
+      from comment m
+      left join account u on m.user_id = u.id 
+      left join judge j on m.id = j.comment_id
+      group by m.id
+      limit ? offset ?;`
     return connection.execute(sql, [String(pageSize), String((currentPage - 1 ) * pageSize)])
   }
 

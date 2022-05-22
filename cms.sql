@@ -11,7 +11,7 @@
  Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 21/05/2022 13:29:48
+ Date: 21/05/2022 17:44:25
 */
 
 SET NAMES utf8mb4;
@@ -69,7 +69,36 @@ INSERT INTO `comment` (`id`, `user_id`, `title`, `content`, `create_time`, `upda
 INSERT INTO `comment` (`id`, `user_id`, `title`, `content`, `create_time`, `update_time`) VALUES (7, 13, '今天天气晴朗！', '天朗气清, 风和日丽！', '2022-05-21 10:58:15', '2022-05-21 10:58:15');
 INSERT INTO `comment` (`id`, `user_id`, `title`, `content`, `create_time`, `update_time`) VALUES (8, 13, '今天天气不错！', '天朗气清, 惠风和畅！', '2022-05-21 12:42:57', '2022-05-21 12:42:57');
 INSERT INTO `comment` (`id`, `user_id`, `title`, `content`, `create_time`, `update_time`) VALUES (9, 13, '枫叶', '枫叶好漂亮！', '2022-05-21 12:50:33', '2022-05-21 12:50:33');
-INSERT INTO `comment` (`id`, `user_id`, `title`, `content`, `create_time`, `update_time`) VALUES (10, 14, '枫叶1', '枫叶好漂亮！1', '2022-05-21 12:51:48', '2022-05-21 12:51:48');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for judge
+-- ----------------------------
+DROP TABLE IF EXISTS `judge`;
+CREATE TABLE `judge` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `judge_content` varchar(200) NOT NULL,
+  `user_id` int NOT NULL,
+  `comment_id` int NOT NULL,
+  `self_id` int DEFAULT NULL,
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `comment_id` (`comment_id`),
+  KEY `self_id` (`self_id`),
+  CONSTRAINT `judge_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `account` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `judge_ibfk_2` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `judge_ibfk_3` FOREIGN KEY (`self_id`) REFERENCES `judge` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of judge
+-- ----------------------------
+BEGIN;
+INSERT INTO `judge` (`id`, `judge_content`, `user_id`, `comment_id`, `self_id`, `create_time`, `update_time`) VALUES (1, '你好，美女！', 14, 2, NULL, '2022-05-21 17:27:35', '2022-05-21 17:27:35');
+INSERT INTO `judge` (`id`, `judge_content`, `user_id`, `comment_id`, `self_id`, `create_time`, `update_time`) VALUES (2, '你好，帅哥！', 14, 2, NULL, '2022-05-21 17:28:38', '2022-05-21 17:28:38');
+INSERT INTO `judge` (`id`, `judge_content`, `user_id`, `comment_id`, `self_id`, `create_time`, `update_time`) VALUES (3, '你好，帅哥！', 13, 2, NULL, '2022-05-21 17:29:14', '2022-05-21 17:29:14');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
